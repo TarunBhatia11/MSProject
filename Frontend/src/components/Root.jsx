@@ -1,0 +1,26 @@
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
+
+const Root = () =>{
+    const {user} = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() =>{
+
+        if(user) {
+            //check if the user is authenticated and redirect accordingly
+            if(user.role === "admin")
+                navigate("/admin/dashboard");
+            else if(user.role === "employee")
+                navigate("/employee/dashboard");
+            else navigate("/login");
+        }
+        else {
+            navigate("/login");
+        }
+
+    }, [user, navigate])
+}
+
+export default Root;
