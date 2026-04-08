@@ -13,8 +13,6 @@ const Login = (req, res) => {
     setLoading(true);
     setError(null);
 
-
-
     try {
 
       const response = await fetch("http://localhost:5000/api/login", {
@@ -25,10 +23,16 @@ const Login = (req, res) => {
         body: JSON.stringify({ email, password })
       });
 
+      const data = axios.post("http://localhost:5000/api/login")
 
       if(!response.ok){
-        throw new Error()
+        throw new Error("Login Failed!! Please check your credentials.")
       }
+
+      const data = await response.json();
+      localStorage.setItem("pos-user", JSON.stringify(data.user));
+      localStorage.setItem("pos-token", data.token);
+      window.location.href = "admin/dashboard";
         
     } catch (error) {
         setError(error.message);
@@ -36,7 +40,7 @@ const Login = (req, res) => {
       setLoading(false);
 
     }
-  }
+  };
 
 
   return (
@@ -88,7 +92,7 @@ const Login = (req, res) => {
             />
           </div>
 
-          {/* Login Button */}
+          {/* Login Button it will help to sign in the user*/}
           <button
             type="submit"
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-2xl transition-all duration-200 active:scale-[0.98] shadow-lg shadow-indigo-500/30"
